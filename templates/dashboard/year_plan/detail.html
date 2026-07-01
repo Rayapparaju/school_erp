@@ -1,0 +1,26 @@
+{% extends 'dashboard/base.html' %}{% load static %}
+{% block title %}{{ year.name }} - Year Plan - {{ SCHOOL_NAME }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><h4 class="fw-bold mb-0"><i class="fas fa-calendar me-2 text-primary"></i>{{ year.name }} Year Plan</h4><a href="{% url 'dashboard:year_plan_list' %}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-arrow-left me-1"></i>Back</a></div>
+<div class="row g-4">
+<div class="col-md-4">
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body p-4">
+<h6 class="fw-bold mb-3"><i class="fas fa-info-circle me-2 text-primary"></i>Year Info</h6>
+<p class="small mb-2"><strong>Start:</strong> {{ year.start_date }}</p>
+<p class="small mb-2"><strong>End:</strong> {{ year.end_date }}</p>
+<p class="small mb-0"><strong>Status:</strong> {% if year.is_current %}<span class="badge bg-success">Current</span>{% else %}<span class="badge bg-secondary">Past</span>{% endif %}</p>
+</div></div>
+<div class="card border-0 shadow-sm rounded-4 mt-3"><div class="card-body p-4">
+<h6 class="fw-bold mb-3"><i class="fas fa-layer-group me-2 text-primary"></i>Terms</h6>
+{% for term in year.terms.all %}<div class="mb-3 pb-2 border-bottom"><div class="fw-medium">{{ term.name }}</div><small class="text-muted">{{ term.start_date|date:"d M Y" }} &mdash; {{ term.end_date|date:"d M Y" }}</small></div>{% empty %}<p class="text-muted small mb-0">No terms defined.</p>{% endfor %}
+</div></div>
+</div>
+<div class="col-md-8">
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body p-4">
+<h6 class="fw-bold mb-3"><i class="fas fa-calendar-day me-2 text-primary"></i>Events & Holidays</h6>
+<div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Date</th><th>Event</th><th>Type</th></tr></thead>
+<tbody>{% for e in events %}<tr><td>{{ e.start_date|date:"d M Y" }}</td><td>{{ e.title }}</td><td><span class="badge bg-{% if e.event_type == 'holiday' %}danger{% elif e.event_type == 'exam' %}warning{% else %}info{% endif %}-subtle text-{% if e.event_type == 'holiday' %}danger{% elif e.event_type == 'exam' %}warning{% else %}info{% endif %} rounded-pill">{{ e.get_event_type_display }}</span></td></tr>{% empty %}<tr><td colspan="3" class="text-center text-muted py-4">No events for this academic year.</td></tr>{% endfor %}</tbody></table></div>
+</div></div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% load static %}
+<div class="bg-primary-gradient text-white" id="sidebar-wrapper">
+    <div class="sidebar-heading text-center py-4 px-3 border-bottom border-white border-opacity-25">
+        <a href="{% url 'dashboard:home' %}" class="text-white text-decoration-none">
+            <i class="fas fa-graduation-cap fa-2x mb-2"></i>
+            <h6 class="fw-bold mb-0 small">School ERP</h6>
+        </a>
+    </div>
+    <div class="list-group list-group-flush">
+        <a href="{% url 'dashboard:home' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+            <i class="fas fa-tachometer-alt me-3"></i><span>Dashboard</span>
+        </a>
+        <div class="list-group-item bg-transparent text-white-50 small fw-medium px-4 py-2 border-0">ACADEMIC</div>
+        <a href="{% url 'dashboard:student_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'student' in request.path and 'admission' not in request.path %}active{% endif %}">
+            <i class="fas fa-user-graduate me-3"></i><span>Students</span>
+        </a>
+        <a href="{% url 'dashboard:student_admission' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'admission' in request.path %}active{% endif %}">
+            <i class="fas fa-user-plus me-3"></i><span>Admission</span>
+        </a>
+        <a href="{% url 'dashboard:teacher_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'teacher' in request.path %}active{% endif %}">
+            <i class="fas fa-chalkboard-teacher me-3"></i><span>Teachers</span>
+        </a>
+        <a href="{% url 'dashboard:class_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'class' in request.path and 'enrollment' not in request.path %}active{% endif %}">
+            <i class="fas fa-school me-3"></i><span>Classes</span>
+        </a>
+        <a href="{% url 'dashboard:subject_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'subject' in request.path %}active{% endif %}">
+            <i class="fas fa-book me-3"></i><span>Subjects</span>
+        </a>
+        <a href="{% url 'dashboard:enrollment_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'enrollment' in request.path %}active{% endif %}">
+            <i class="fas fa-clipboard-list me-3"></i><span>Enrollments</span>
+        </a>
+        <div class="list-group-item bg-transparent text-white-50 small fw-medium px-4 py-2 border-0">MANAGEMENT</div>
+        <a href="{% url 'dashboard:attendance_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'attendance' in request.path %}active{% endif %}">
+            <i class="fas fa-calendar-check me-3"></i><span>Attendance</span>
+        </a>
+        <a href="{% url 'dashboard:exam_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'exam' in request.path %}active{% endif %}">
+            <i class="fas fa-pencil-alt me-3"></i><span>Exams</span>
+        </a>
+        <a href="{% url 'dashboard:exam_result_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'exam-result' in request.path %}active{% endif %}">
+            <i class="fas fa-poll me-3"></i><span>Results</span>
+        </a>
+        <div class="list-group-item bg-transparent text-white-50 small fw-medium px-4 py-2 border-0">FINANCE</div>
+        <a href="{% url 'dashboard:fee_structure_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'fee-structure' in request.path %}active{% endif %}">
+            <i class="fas fa-money-bill-wave me-3"></i><span>Fee Structure</span>
+        </a>
+        <a href="{% url 'dashboard:fee_payment_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'fee-payment' in request.path %}active{% endif %}">
+            <i class="fas fa-credit-card me-3"></i><span>Payments</span>
+        </a>
+        <div class="list-group-item bg-transparent text-white-50 small fw-medium px-4 py-2 border-0">LIBRARY</div>
+        <a href="{% url 'dashboard:library_book_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'library' in request.path %}active{% endif %}">
+            <i class="fas fa-book-open me-3"></i><span>Books</span>
+        </a>
+        <a href="{% url 'dashboard:book_issue_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'book-issue' in request.path %}active{% endif %}">
+            <i class="fas fa-hand-holding me-3"></i><span>Book Issues</span>
+        </a>
+        <div class="list-group-item bg-transparent text-white-50 small fw-medium px-4 py-2 border-0">ACADEMICS</div>
+        <a href="{% url 'dashboard:timetable_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'timetable' in request.path %}active{% endif %}">
+            <i class="fas fa-calendar-alt me-3"></i><span>Timetable</span>
+        </a>
+        <a href="{% url 'dashboard:year_plan_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'year-plan' in request.path %}active{% endif %}">
+            <i class="fas fa-calendar me-3"></i><span>Year Plan</span>
+        </a>
+        <a href="{% url 'dashboard:subject_year_plan_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'subject-year-plan' in request.path %}active{% endif %}">
+            <i class="fas fa-book me-3"></i><span>Subject Year Plan</span>
+        </a>
+        <div class="list-group-item bg-transparent text-white-50 small fw-medium px-4 py-2 border-0">COMMUNICATION</div>
+        <div class="list-group-item bg-transparent text-white-50 small fw-medium px-4 py-2 border-0">TRANSPORT</div>
+        <a href="{% url 'dashboard:vehicle_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'vehicle' in request.path %}active{% endif %}">
+            <i class="fas fa-bus me-3"></i><span>Vehicles</span>
+        </a>
+        <a href="{% url 'dashboard:route_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'route' in request.path %}active{% endif %}">
+            <i class="fas fa-road me-3"></i><span>Routes</span>
+        </a>
+        <a href="{% url 'dashboard:stop_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'stop' in request.path %}active{% endif %}">
+            <i class="fas fa-map-marker-alt me-3"></i><span>Stops</span>
+        </a>
+        <a href="{% url 'dashboard:transport_assignment_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'transport-assignment' in request.path %}active{% endif %}">
+            <i class="fas fa-users me-3"></i><span>Assignments</span>
+        </a>
+        <a href="{% url 'dashboard:event_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'event' in request.path %}active{% endif %}">
+            <i class="fas fa-calendar-alt me-3"></i><span>Events</span>
+        </a>
+        <a href="{% url 'dashboard:notice_list' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'notice' in request.path %}active{% endif %}">
+            <i class="fas fa-bullhorn me-3"></i><span>Notices</span>
+        </a>
+        <div class="list-group-item bg-transparent text-white-50 small fw-medium px-4 py-2 border-0">REPORTS</div>
+        <a href="{% url 'dashboard:reports' %}" class="list-group-item list-group-item-action bg-transparent text-white sidebar-item {% if 'report' in request.path %}active{% endif %}">
+            <i class="fas fa-chart-bar me-3"></i><span>Reports</span>
+        </a>
+    </div>
+</div>

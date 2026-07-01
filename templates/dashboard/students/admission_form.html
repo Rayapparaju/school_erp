@@ -1,0 +1,147 @@
+{% extends 'dashboard/base.html' %}{% load static %}
+{% block title %}New Student Admission - {{ SCHOOL_NAME }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h4 class="fw-bold mb-0"><i class="fas fa-user-plus me-2 text-primary"></i>New Student Admission</h4>
+    <a href="{% url 'dashboard:student_list' %}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-arrow-left me-1"></i>Back to Students</a>
+</div>
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-header bg-transparent border-bottom-0 pt-4 px-4">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab"><i class="fas fa-user me-1"></i>Personal Details</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="enrollment-tab" data-bs-toggle="tab" data-bs-target="#enrollment" type="button" role="tab"><i class="fas fa-graduation-cap me-1"></i>Enrollment</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="guardian-tab" data-bs-toggle="tab" data-bs-target="#guardian" type="button" role="tab"><i class="fas fa-users me-1"></i>Guardian &amp; Medical</button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="personal" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">First Name <span class="text-danger">*</span></label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}<div class="text-danger small mt-1">{{ form.first_name.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">Last Name <span class="text-danger">*</span></label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}<div class="text-danger small mt-1">{{ form.last_name.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">Email <span class="text-danger">*</span></label>
+                            {{ form.email }}
+                            {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">Phone <span class="text-danger">*</span></label>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}<div class="text-danger small mt-1">{{ form.phone.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">Date of Birth <span class="text-danger">*</span></label>
+                            {{ form.date_of_birth }}
+                            {% if form.date_of_birth.errors %}<div class="text-danger small mt-1">{{ form.date_of_birth.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">Gender <span class="text-danger">*</span></label>
+                            {{ form.gender }}
+                            {% if form.gender.errors %}<div class="text-danger small mt-1">{{ form.gender.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">Photo</label>
+                            {{ form.photo }}
+                            {% if form.photo.errors %}<div class="text-danger small mt-1">{{ form.photo.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">Blood Group</label>
+                            {{ form.blood_group }}
+                            {% if form.blood_group.errors %}<div class="text-danger small mt-1">{{ form.blood_group.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-medium">Address <span class="text-danger">*</span></label>
+                            {{ form.address }}
+                            {% if form.address.errors %}<div class="text-danger small mt-1">{{ form.address.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">City <span class="text-danger">*</span></label>
+                            {{ form.city }}
+                            {% if form.city.errors %}<div class="text-danger small mt-1">{{ form.city.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">State <span class="text-danger">*</span></label>
+                            {{ form.state }}
+                            {% if form.state.errors %}<div class="text-danger small mt-1">{{ form.state.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-medium">Zip Code <span class="text-danger">*</span></label>
+                            {{ form.zip_code }}
+                            {% if form.zip_code.errors %}<div class="text-danger small mt-1">{{ form.zip_code.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="enrollment" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">Class <span class="text-danger">*</span></label>
+                            {{ form.class_enrolled }}
+                            {% if form.class_enrolled.errors %}<div class="text-danger small mt-1">{{ form.class_enrolled.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">Academic Year <span class="text-danger">*</span></label>
+                            {{ form.academic_year }}
+                            {% if form.academic_year.errors %}<div class="text-danger small mt-1">{{ form.academic_year.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">Admission Date <span class="text-danger">*</span></label>
+                            {{ form.admission_date }}
+                            {% if form.admission_date.errors %}<div class="text-danger small mt-1">{{ form.admission_date.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">Roll Number</label>
+                            {{ form.roll_number }}
+                            <div class="form-text small">Leave blank to auto-generate.</div>
+                            {% if form.roll_number.errors %}<div class="text-danger small mt-1">{{ form.roll_number.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="guardian" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">Guardian Name <span class="text-danger">*</span></label>
+                            {{ form.guardian_name }}
+                            {% if form.guardian_name.errors %}<div class="text-danger small mt-1">{{ form.guardian_name.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">Guardian Phone <span class="text-danger">*</span></label>
+                            {{ form.guardian_phone }}
+                            {% if form.guardian_phone.errors %}<div class="text-danger small mt-1">{{ form.guardian_phone.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-medium">Guardian Email</label>
+                            {{ form.guardian_email }}
+                            {% if form.guardian_email.errors %}<div class="text-danger small mt-1">{{ form.guardian_email.errors.0 }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-medium">Medical Notes</label>
+                            {{ form.medical_notes }}
+                            {% if form.medical_notes.errors %}<div class="text-danger small mt-1">{{ form.medical_notes.errors.0 }}</div>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="fas fa-user-plus me-1"></i>Admit Student</button>
+                <a href="{% url 'dashboard:student_list' %}" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

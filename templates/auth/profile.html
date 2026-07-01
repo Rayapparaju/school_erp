@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Profile - {{ SCHOOL_NAME }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body text-center p-4">
+                    {% if user.profile.profile_picture %}
+                    <img src="{{ user.profile.profile_picture.url }}" class="rounded-circle mb-3" width="120" height="120" style="object-fit:cover;">
+                    {% else %}
+                    <div class="rounded-circle bg-primary-gradient d-inline-flex align-items-center justify-content-center mb-3" style="width:120px;height:120px;">
+                        <i class="fas fa-user fa-4x text-white"></i>
+                    </div>
+                    {% endif %}
+                    <h5 class="fw-bold">{{ user.get_full_name|default:user.username }}</h5>
+                    <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill">{{ user.profile.get_user_type_display|default:'User' }}</span>
+                    <div class="mt-3">
+                        <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary btn-sm rounded-pill"><i class="fas fa-edit me-1"></i>Edit Profile</a>
+                        <a href="{% url 'change_password' %}" class="btn btn-outline-warning btn-sm rounded-pill"><i class="fas fa-key me-1"></i>Change Password</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h5 class="fw-bold mb-0"><i class="fas fa-info-circle me-2 text-primary"></i>Account Information</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Username</label>
+                            <p class="fw-medium">{{ user.username }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Email</label>
+                            <p class="fw-medium">{{ user.email }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">First Name</label>
+                            <p class="fw-medium">{{ user.first_name|default:'Not set' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Last Name</label>
+                            <p class="fw-medium">{{ user.last_name|default:'Not set' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Phone</label>
+                            <p class="fw-medium">{{ user.profile.phone|default:'Not set' }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">User Type</label>
+                            <p class="fw-medium">{{ user.profile.get_user_type_display|default:'User' }}</p>
+                        </div>
+                        <div class="col-12">
+                            <label class="text-muted small">Address</label>
+                            <p class="fw-medium">{{ user.profile.address|default:'Not set' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

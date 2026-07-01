@@ -1,0 +1,19 @@
+{% extends 'dashboard/base.html' %}{% load static %}
+{% block title %}Transport Assignments - {{ SCHOOL_NAME }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h4 class="fw-bold mb-0"><i class="fas fa-users me-2 text-primary"></i>Transport Assignments</h4>
+    <a href="{% url 'dashboard:transport_assignment_create' %}" class="btn btn-primary btn-sm rounded-pill"><i class="fas fa-plus me-1"></i>Assign Transport</a>
+</div>
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body p-3">
+<form class="row g-2 mb-3" method="get">
+    <div class="col-md-4"><input type="text" name="search" class="form-control form-control-sm" placeholder="Search academic year..." value="{{ search_query }}"></div>
+    <div class="col-md-2"><button type="submit" class="btn btn-primary btn-sm w-100"><i class="fas fa-search me-1"></i>Search</button></div>
+    {% if search_query %}<div class="col-md-2"><a href="{% url 'dashboard:transport_assignment_list' %}" class="btn btn-outline-secondary btn-sm w-100">Clear</a></div>{% endif %}
+</form>
+<div class="table-responsive"><table class="table table-hover align-middle mb-0">
+<thead class="table-light"><tr><th>Student</th><th>Vehicle</th><th>Route</th><th>Stop</th><th>Year</th><th>Fee</th><th>Status</th><th class="text-end">Actions</th></tr></thead>
+<tbody>{% for obj in page_obj %}<tr><td class="fw-medium">{{ obj.student.full_name }}</td><td>{{ obj.vehicle.vehicle_number }}</td><td>{{ obj.route.route_code }}</td><td>{{ obj.stop.name|truncatechars:20 }}</td><td>{{ obj.academic_year }}</td><td>${{ obj.fee_amount }}</td><td>{% if obj.status %}<span class="badge bg-success-subtle text-success">Active</span>{% else %}<span class="badge bg-danger-subtle text-danger">Inactive</span>{% endif %}</td><td class="text-end"><a href="{% url 'dashboard:transport_assignment_update' obj.pk %}" class="btn btn-sm btn-outline-primary rounded-circle me-1"><i class="fas fa-edit"></i></a><a href="{% url 'dashboard:transport_assignment_delete' obj.pk %}" class="btn btn-sm btn-outline-danger rounded-circle" onclick="return confirm('Deactivate this assignment?')"><i class="fas fa-trash"></i></a></td></tr>{% empty %}<tr><td colspan="8" class="text-center text-muted py-4"><i class="fas fa-users fa-2x mb-2 d-block"></i>No transport assignments found.</td></tr>{% endfor %}</tbody>
+</table></div>
+{% if page_obj.paginator.num_pages > 1 %}<nav class="mt-3">{% include 'includes/pagination.html' %}</nav>{% endif %}
+</div></div>{% endblock %}

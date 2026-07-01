@@ -1,0 +1,8 @@
+{% extends 'dashboard/base.html' %}{% load static %}
+{% block title %}Class Timetable - {{ cls.name }} - {{ SCHOOL_NAME }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><h4 class="fw-bold mb-0"><i class="fas fa-calendar-alt me-2 text-primary"></i>{{ cls.name }} - Timetable</h4><a href="{% url 'dashboard:timetable_list' %}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-arrow-left me-1"></i>Back</a></div>
+<div class="card border-0 shadow-sm rounded-4"><div class="card-body p-3">
+<div class="table-responsive"><table class="table table-bordered align-middle mb-0"><thead class="table-primary"><tr><th style="width:100px">Day</th><th>Period 1<br><small>9:00-9:50</small></th><th>Period 2<br><small>9:50-10:40</small></th><th>Period 3<br><small>10:50-11:40</small></th><th>Period 4<br><small>11:40-12:30</small></th><th>Period 5<br><small>1:00-1:50</small></th><th>Period 6<br><small>1:50-2:40</small></th></tr></thead>
+<tbody>{% for day in days %}<tr><td class="fw-medium text-capitalize bg-light">{{ day|title }}</td>{% for period in timetable|dictsort:day %}<td>{% if period %}<div class="small fw-medium">{{ period.subject }}</div><div class="small text-muted">{{ period.teacher.full_name }}</div><div class="small text-muted">{{ period.room_number|default:"" }}</div>{% else %}<span class="text-muted small">-</span>{% endif %}</td>{% empty %}<td colspan="6" class="text-center text-muted small">No classes</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+</div></div>{% endblock %}

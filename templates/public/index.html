@@ -1,0 +1,176 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Home - {{ SCHOOL_NAME }}{% endblock %}
+{% block content %}
+
+{% comment %} Hero Section {% endcomment %}
+<section class="hero-section position-relative overflow-hidden" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 90vh;">
+    <div class="container h-100">
+        <div class="row align-items-center min-vh-75 py-5">
+            <div class="col-lg-6 text-white py-5">
+                <span class="badge bg-white text-primary px-3 py-2 rounded-pill mb-3 animate__animated animate__fadeInUp"><i class="fas fa-star me-1"></i> Top Rated Institution</span>
+                <h1 class="display-4 fw-bold mb-3 animate__animated animate__fadeInUp">{{ SCHOOL_NAME }}</h1>
+                <p class="lead mb-4 opacity-90 animate__animated animate__fadeInUp">{{ SCHOOL_TAGLINE }}</p>
+                <div class="d-flex flex-wrap gap-3 animate__animated animate__fadeInUp">
+                    <a href="{% url 'about' %}" class="btn btn-light btn-lg rounded-pill px-4 fw-medium"><i class="fas fa-info-circle me-2"></i>Learn More</a>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-light btn-lg rounded-pill px-4"><i class="fas fa-envelope me-2"></i>Contact Us</a>
+                </div>
+                <div class="row g-3 mt-4">
+                    <div class="col-4"><div class="text-center p-3 bg-white bg-opacity-10 rounded-3"><h3 class="fw-bold mb-0">{{ student_count|default:"500" }}+</h3><small>Students</small></div></div>
+                    <div class="col-4"><div class="text-center p-3 bg-white bg-opacity-10 rounded-3"><h3 class="fw-bold mb-0">{{ teacher_count|default:"50" }}+</h3><small>Teachers</small></div></div>
+                    <div class="col-4"><div class="text-center p-3 bg-white bg-opacity-10 rounded-3"><h3 class="fw-bold mb-0">{{ class_count|default:"20" }}+</h3><small>Classes</small></div></div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center d-none d-lg-block">
+                <div class="p-5">
+                    <div class="rounded-circle bg-white bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 400px; height: 400px;">
+                        <i class="fas fa-graduation-cap" style="font-size: 150px; color: rgba(255,255,255,0.2);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="position-absolute bottom-0 start-0 w-100" style="height: 80px; background: linear-gradient(to top, var(--bs-body-bg), transparent);"></div>
+</section>
+
+{% comment %} About Section {% endcomment %}
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5">
+                <div class="position-relative">
+                    <div class="rounded-4 overflow-hidden shadow-lg">
+                        <div class="bg-primary-gradient p-5 text-center text-white">
+                            <i class="fas fa-school mb-3" style="font-size: 4rem;"></i>
+                            <h4 class="fw-bold">25+ Years of Excellence</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3">About Us</span>
+                <h2 class="display-6 fw-bold mb-3">Shaping the Future of Education</h2>
+                <p class="text-muted">We are committed to providing quality education that nurtures talent, builds character, and prepares students for a successful future. Our experienced faculty and modern infrastructure create the perfect learning environment.</p>
+                <div class="row g-3 mt-3">
+                    <div class="col-md-6"><div class="d-flex align-items-center"><div class="rounded-circle bg-primary-soft p-3 me-3"><i class="fas fa-chalkboard-teacher text-primary fa-lg"></i></div><div><h6 class="mb-0">Expert Faculty</h6><small class="text-muted">Qualified teachers</small></div></div></div>
+                    <div class="col-md-6"><div class="d-flex align-items-center"><div class="rounded-circle bg-success-soft p-3 me-3"><i class="fas fa-laptop text-success fa-lg"></i></div><div><h6 class="mb-0">Smart Classes</h6><small class="text-muted">Digital learning</small></div></div></div>
+                    <div class="col-md-6"><div class="d-flex align-items-center"><div class="rounded-circle bg-warning-soft p-3 me-3"><i class="fas fa-book text-warning fa-lg"></i></div><div><h6 class="mb-0">Rich Library</h6><small class="text-muted">5000+ books</small></div></div></div>
+                    <div class="col-md-6"><div class="d-flex align-items-center"><div class="rounded-circle bg-info-soft p-3 me-3"><i class="fas fa-trophy text-info fa-lg"></i></div><div><h6 class="mb-0">Sports & Arts</h6><small class="text-muted">Holistic growth</small></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% comment %} Services Section {% endcomment %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3">Our Services</span>
+            <h2 class="display-6 fw-bold">What We Offer</h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">Comprehensive educational services designed to bring out the best in every student.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6"><div class="card border-0 shadow-sm rounded-4 h-100 hover-lift"><div class="card-body p-4 text-center"><div class="rounded-circle bg-primary-soft d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;"><i class="fas fa-book-open text-primary fa-2x"></i></div><h5 class="fw-bold">Academic Programs</h5><p class="text-muted small">Comprehensive curriculum from kindergarten to grade 12.</p></div></div></div>
+            <div class="col-lg-3 col-md-6"><div class="card border-0 shadow-sm rounded-4 h-100 hover-lift"><div class="card-body p-4 text-center"><div class="rounded-circle bg-success-soft d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;"><i class="fas fa-flask text-success fa-2x"></i></div><h5 class="fw-bold">Science Labs</h5><p class="text-muted small">Well-equipped physics, chemistry, and biology laboratories.</p></div></div></div>
+            <div class="col-lg-3 col-md-6"><div class="card border-0 shadow-sm rounded-4 h-100 hover-lift"><div class="card-body p-4 text-center"><div class="rounded-circle bg-warning-soft d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;"><i class="fas fa-futbol text-warning fa-2x"></i></div><h5 class="fw-bold">Sports Facility</h5><p class="text-muted small">Indoor and outdoor sports grounds with professional coaching.</p></div></div></div>
+            <div class="col-lg-3 col-md-6"><div class="card border-0 shadow-sm rounded-4 h-100 hover-lift"><div class="card-body p-4 text-center"><div class="rounded-circle bg-info-soft d-inline-flex align-items-center justify-content-center mb-3" style="width: 70px; height: 70px;"><i class="fas fa-music text-info fa-2x"></i></div><h5 class="fw-bold">Cultural Arts</h5><p class="text-muted small">Music, dance, drama, and fine arts programs.</p></div></div></div>
+        </div>
+    </div>
+</section>
+
+{% comment %} Features Section {% endcomment %}
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3">Features</span>
+                <h2 class="display-6 fw-bold mb-3">Why Choose {{ SCHOOL_NAME }}?</h2>
+                <div class="d-flex mb-3"><div class="flex-shrink-0"><div class="rounded-circle bg-primary-soft p-2 me-3"><i class="fas fa-check text-primary"></i></div></div><div><h6 class="fw-bold">Modern Curriculum</h6><p class="text-muted small">Updated syllabus aligned with national standards.</p></div></div>
+                <div class="d-flex mb-3"><div class="flex-shrink-0"><div class="rounded-circle bg-success-soft p-2 me-3"><i class="fas fa-check text-success"></i></div></div><div><h6 class="fw-bold">Experienced Faculty</h6><p class="text-muted small">Dedicated teachers with years of experience.</p></div></div>
+                <div class="d-flex mb-3"><div class="flex-shrink-0"><div class="rounded-circle bg-warning-soft p-2 me-3"><i class="fas fa-check text-warning"></i></div></div><div><h6 class="fw-bold">Digital Campus</h6><p class="text-muted small">Smart classrooms and online learning portal.</p></div></div>
+                <div class="d-flex mb-3"><div class="flex-shrink-0"><div class="rounded-circle bg-info-soft p-2 me-3"><i class="fas fa-check text-info"></i></div></div><div><h6 class="fw-bold">Safe Environment</h6><p class="text-muted small">24/7 security and CCTV surveillance.</p></div></div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-6"><div class="card border-0 shadow-sm rounded-4 p-4 text-center hover-lift"><h1 class="fw-bold text-primary mb-0">{{ student_count|default:"500" }}</h1><small class="text-muted">Students</small></div></div>
+                    <div class="col-6"><div class="card border-0 shadow-sm rounded-4 p-4 text-center hover-lift"><h1 class="fw-bold text-success mb-0">{{ teacher_count|default:"50" }}</h1><small class="text-muted">Teachers</small></div></div>
+                    <div class="col-6"><div class="card border-0 shadow-sm rounded-4 p-4 text-center hover-lift"><h1 class="fw-bold text-warning mb-0">{{ class_count|default:"20" }}</h1><small class="text-muted">Classes</small></div></div>
+                    <div class="col-6"><div class="card border-0 shadow-sm rounded-4 p-4 text-center hover-lift"><h1 class="fw-bold text-info mb-0">100%</h1><small class="text-muted">Pass Rate</small></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% comment %} Notices Section {% endcomment %}
+{% if notices %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="badge bg-primary-soft text-primary px-3 py-2 rounded-pill mb-3">Updates</span>
+            <h2 class="display-6 fw-bold">Latest Notices</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="list-group border-0 shadow-sm rounded-4 overflow-hidden">
+                    {% for notice in notices %}
+                    <div class="list-group-item list-group-item-action p-4 border-0 border-bottom">
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-{% if notice.priority == 'urgent' %}danger{% elif notice.priority == 'high' %}warning{% else %}info{% endif %} me-3 rounded-pill">{{ notice.get_priority_display }}</span>
+                            <div>
+                                <h6 class="fw-bold mb-1">{{ notice.title }}</h6>
+                                <small class="text-muted"><i class="far fa-calendar me-1"></i>{{ notice.publish_date }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% comment %} Events Section {% endcomment %}
+{% if events %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold">Upcoming Events</h2>
+        </div>
+        <div class="row g-4">
+            {% for event in events %}
+            <div class="col-lg-4 col-md-6"><div class="card border-0 shadow-sm rounded-4 h-100 hover-lift"><div class="card-body p-4"><div class="d-flex align-items-center mb-3"><div class="rounded-3 bg-primary-soft p-3 me-3"><i class="fas fa-calendar-day text-primary fa-2x"></i></div><div><h6 class="fw-bold mb-0">{{ event.title|truncatechars:30 }}</h6><small class="text-muted"><i class="far fa-clock me-1"></i>{{ event.start_date|date:"M d, Y" }}</small></div></div><p class="text-muted small mb-0"><i class="fas fa-map-marker-alt me-1"></i>{{ event.venue }}</p></div></div></div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% comment %} Testimonial Section {% endcomment %}
+<section class="py-5 bg-primary-gradient text-white text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <i class="fas fa-quote-right mb-3" style="font-size: 3rem; opacity: 0.5;"></i>
+                <h3 class="fw-bold mb-3">"Education is the most powerful weapon which you can use to change the world."</h3>
+                <p class="opacity-75 mb-0">— Nelson Mandela</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% comment %} CTA Section {% endcomment %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-lg rounded-4 bg-primary-gradient text-white p-5 text-center">
+                    <h3 class="fw-bold">Ready to Join Us?</h3>
+                    <p>Enroll your child today and give them the gift of quality education.</p>
+                    <div><a href="{% url 'contact' %}" class="btn btn-light btn-lg rounded-pill px-5 fw-medium"><i class="fas fa-arrow-right me-2"></i>Get Started</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

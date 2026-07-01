@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% load static %}{% block title %}Contact - {{ SCHOOL_NAME }}{% endblock %}
+{% block content %}
+<section class="py-5 bg-primary-gradient text-white text-center">
+    <div class="container"><h1 class="fw-bold display-5">Contact Us</h1><p class="lead opacity-75">We'd love to hear from you.</p></div>
+</section>
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-5">
+                <h4 class="fw-bold mb-4">Get In Touch</h4>
+                <div class="d-flex mb-4"><div class="flex-shrink-0"><div class="rounded-circle bg-primary-soft p-3 me-3"><i class="fas fa-map-marker-alt text-primary"></i></div></div><div><h6 class="fw-bold">Address</h6><p class="text-muted mb-0">{{ SCHOOL_ADDRESS }}</p></div></div>
+                <div class="d-flex mb-4"><div class="flex-shrink-0"><div class="rounded-circle bg-success-soft p-3 me-3"><i class="fas fa-phone text-success"></i></div></div><div><h6 class="fw-bold">Phone</h6><p class="text-muted mb-0">{{ SCHOOL_PHONE }}</p></div></div>
+                <div class="d-flex mb-4"><div class="flex-shrink-0"><div class="rounded-circle bg-info-soft p-3 me-3"><i class="fas fa-envelope text-info"></i></div></div><div><h6 class="fw-bold">Email</h6><p class="text-muted mb-0">{{ SCHOOL_EMAIL }}</p></div></div>
+            </div>
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <h5 class="fw-bold mb-3">Send a Message</h5>
+                    <form method="post">{% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">{{ form.name }}</div>
+                            <div class="col-md-6">{{ form.email }}</div>
+                            <div class="col-12">{{ form.subject }}</div>
+                            <div class="col-12">{{ form.message }}</div>
+                            <div class="col-12"><button type="submit" class="btn btn-primary rounded-pill px-4"><i class="fas fa-paper-plane me-2"></i>Send Message</button></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
