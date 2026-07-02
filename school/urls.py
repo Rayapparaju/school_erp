@@ -93,6 +93,9 @@ urlpatterns = [
         # Fee Payments
         path('fee-payments/', views.fee_payment_list, name='fee_payment_list'),
         path('fee-payments/create/', views.fee_payment_create, name='fee_payment_create'),
+        path('fee-payments/bulk-create/', views.fee_payment_bulk_create, name='fee_payment_bulk_create'),
+        path('fee-payments/bulk-receipt/<str:receipt_prefix>/', views.fee_payment_bulk_receipt, name='fee_payment_bulk_receipt'),
+        path('fee-payments/bulk-receipt/<str:receipt_prefix>/pdf/', views.fee_payment_bulk_receipt_pdf, name='fee_payment_bulk_receipt_pdf'),
         path('fee-payments/<int:pk>/update/', views.fee_payment_update, name='fee_payment_update'),
         path('fee-payments/<int:pk>/delete/', views.fee_payment_delete, name='fee_payment_delete'),
         path('fee-payments/<int:pk>/receipt/', views.fee_payment_receipt, name='fee_payment_receipt'),

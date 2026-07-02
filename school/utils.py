@@ -99,7 +99,7 @@ def generate_fee_receipt_pdf(payment, school_name):
         FONT_BOLD = 'Helvetica-Bold'
 
     buf = io.BytesIO()
-    doc = SimpleDocTemplate(buf, pagesize=A4, topMargin=15*mm, bottomMargin=15*mm)
+    doc = SimpleDocTemplate(buf, pagesize=A4, topMargin=12*mm, bottomMargin=12*mm, leftMargin=15*mm, rightMargin=15*mm)
     styles = getSampleStyleSheet()
     style_heading = ParagraphStyle('Heading', parent=styles['Heading2'], fontSize=14, spaceAfter=6, alignment=TA_CENTER, fontName=FONT_BOLD)
     style_copy = ParagraphStyle('CopyLabel', parent=styles['Normal'], fontSize=10, alignment=TA_CENTER, spaceBefore=4, textColor=colors.gray, fontName=FONT_NAME)
@@ -112,13 +112,11 @@ def generate_fee_receipt_pdf(payment, school_name):
     enrollment = payment.student.enrollments.first()
     class_name = str(enrollment.class_enrolled) if enrollment else '-'
 
-    def make_copy_block(label):
-        data = [
-            [Paragraph(school_name, style_heading)],
-            [Paragraph(f'<b>Fee Payment Receipt</b>', ParagraphStyle('SubHead', parent=styles['Normal'], fontSize=11, alignment=TA_CENTER))],
-            [Paragraph(f'<i>{label}</i>', style_copy)],
-            [HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea'))],
-        ]
+    def make_copy_block(label, elements):
+        elements.append(Paragraph(school_name, style_heading))
+        elements.append(Paragraph(f'<b>Fee Payment Receipt</b>', ParagraphStyle('SubHead', parent=styles['Normal'], fontSize=11, alignment=TA_CENTER)))
+        elements.append(Paragraph(f'<i>{label}</i>', style_copy))
+        elements.append(HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea')))
 
         fields = [
             ('Receipt #:', payment.receipt_number),
@@ -132,9 +130,9 @@ def generate_fee_receipt_pdf(payment, school_name):
             ]
             t = Table(row, colWidths=[100, 300])
             t.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE'), ('TOPPADDING', (0,0), (-1,-1), 2), ('BOTTOMPADDING', (0,0), (-1,-1), 2)]))
-            data.append([t])
+            elements.append(t)
 
-        data.append([HRFlowable(width='100%', thickness=0.5)])
+        elements.append(HRFlowable(width='100%', thickness=0.5))
         info_rows = [
             ('Student:', payment.student.full_name),
             ('Class:', class_name),
@@ -147,31 +145,23 @@ def generate_fee_receipt_pdf(payment, school_name):
             ]
             t = Table(row, colWidths=[100, 300])
             t.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE'), ('TOPPADDING', (0,0), (-1,-1), 2), ('BOTTOMPADDING', (0,0), (-1,-1), 2)]))
-            data.append([t])
+            elements.append(t)
 
-        data.append([HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea'))])
-        data.append([Paragraph(f'<b>Amount Paid: \u20b9{payment.amount_paid:.2f}</b>', style_amount)])
-        data.append([HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea'))])
-        data.append([Paragraph('Thank you for the payment!', ParagraphStyle('Thanks', parent=styles['Normal'], fontSize=9, alignment=TA_CENTER, textColor=colors.gray))])
-        data.append([Paragraph('This is a computer-generated receipt.', ParagraphStyle('Fine', parent=styles['Normal'], fontSize=8, alignment=TA_CENTER, textColor=colors.gray))])
-
-        t = Table(data, colWidths=[400])
-        t.setStyle(TableStyle([
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('TOPPADDING', (0, 0), (-1, -1), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-            ('LEFTPADDING', (0, 0), (-1, -1), 10),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 10),
-            ('BOX', (0, 0), (-1, -1), 0.5, colors.HexColor('#cccccc')),
-        ]))
-        return t
+        elements.append(HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea')))
+        elements.append(Paragraph(f'<b>Amount Paid: \u20b9{payment.amount_paid:.2f}</b>', style_amount))
+        elements.append(HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea')))
+        elements.append(Paragraph('Thank you for the payment!', ParagraphStyle('Thanks', parent=styles['Normal'], fontSize=9, alignment=TA_CENTER, textColor=colors.gray)))
+        elements.append(Paragraph('This is a computer-generated receipt.', ParagraphStyle('Fine', parent=styles['Normal'], fontSize=8, alignment=TA_CENTER, textColor=colors.gray)))
+        elements.append(Spacer(1, 20))
+        elements.append(Paragraph('_________________________', ParagraphStyle('Sig', parent=styles['Normal'], fontSize=10, alignment=TA_RIGHT, textColor=colors.black, fontName=FONT_NAME)))
+        elements.append(Paragraph('<b>Authorised Signatory</b>', ParagraphStyle('SigL', parent=styles['Normal'], fontSize=9, alignment=TA_RIGHT, textColor=colors.gray, fontName=FONT_NAME)))
 
     elements = []
-    elements.append(make_copy_block('OFFICE COPY'))
+    make_copy_block('OFFICE COPY', elements)
     elements.append(Spacer(1, 8))
     elements.append(Paragraph('<i>~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  CUT HERE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</i>', ParagraphStyle('CutLine', parent=styles['Normal'], fontSize=8, alignment=TA_CENTER, textColor=colors.gray)))
     elements.append(Spacer(1, 8))
-    elements.append(make_copy_block('CUSTOMER COPY'))
+    make_copy_block('CUSTOMER COPY', elements)
 
     doc.build(elements)
     buf.seek(0)

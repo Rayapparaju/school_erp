@@ -1,0 +1,129 @@
+{% extends 'dashboard/base.html' %}{% load static %}
+{% block title %}Record Bulk Payments - {{ SCHOOL_NAME }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <h4 class="fw-bold mb-0"><i class="fas fa-credit-card me-2 text-primary"></i>Record Bulk Payments</h4>
+    <a href="{% url 'dashboard:fee_payment_list' %}" class="btn btn-outline-secondary btn-sm rounded-pill"><i class="fas fa-arrow-left me-1"></i>Back</a>
+</div>
+
+{% if not fee_structures %}
+<form method="post">
+{% csrf_token %}
+<div class="card border-0 shadow-sm rounded-4 mb-3">
+    <div class="card-body p-4">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label small fw-medium">Select Student <span class="text-danger">*</span></label>
+                <select name="student" class="form-select" required>
+                    <option value="">-- Choose Student --</option>
+                    {% for s in form.student.field.queryset %}
+                    <option value="{{ s.pk }}">{{ s.full_name }} ({{ s.roll_number }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="fas fa-search me-1"></i>Load Fee Structures</button>
+        </div>
+    </div>
+</div>
+</form>
+{% else %}
+<form method="post">
+{% csrf_token %}
+<input type="hidden" name="action" value="create">
+<input type="hidden" name="student" value="{{ student.pk }}">
+<div class="card border-0 shadow-sm rounded-4 mb-3">
+    <div class="card-body p-4">
+        <div class="d-flex align-items-center mb-3">
+            <div class="me-4">
+                <span class="text-muted small">Student:</span>
+                <span class="fw-medium">{{ student.full_name }} ({{ student.roll_number }})</span>
+            </div>
+            <div class="me-4">
+                <span class="text-muted small">Class:</span>
+                <span class="fw-medium">{{ student.enrollments.first.class_enrolled }}</span>
+            </div>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label class="form-label small fw-medium">Payment Date <span class="text-danger">*</span></label>
+                <input type="date" name="payment_date" class="form-control" value="{% now "Y-m-d" %}" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label small fw-medium">Default Payment Method <span class="text-danger">*</span></label>
+                <select name="payment_method" class="form-select" required>
+                    {% for code, label in form.payment_method.field.choices %}
+                    <option value="{{ code }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width:30px;">#</th>
+                        <th>Fee Structure</th>
+                        <th style="width:80px;">Amount Due</th>
+                        <th style="width:140px;">Amount Paid (&#8377;)</th>
+                        <th style="width:150px;">Payment Method</th>
+                        <th>Transaction ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fs in fee_structures %}
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td>
+                            <span class="fw-medium">{{ fs.name }}</span>
+                            <input type="hidden" name="fee_id" value="{{ fs.pk }}">
+                        </td>
+                        <td class="text-end">&#8377;{{ fs.amount }}</td>
+                        <td>
+                            <input type="number" name="amount_paid" step="0.01" min="0" max="{{ fs.amount }}" class="form-control form-control-sm" placeholder="0.00">
+                        </td>
+                        <td>
+                            <select name="row_method" class="form-select form-select-sm">
+                                <option value="">Default</option>
+                                {% for code, label in form.payment_method.field.choices %}
+                                <option value="{{ code }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="transaction_id" class="form-control form-control-sm" placeholder="Optional">
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="table-light fw-bold">
+                    <tr>
+                        <td colspan="3" class="text-end">Total:</td>
+                        <td id="total-paid">&#8377;0.00</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="mt-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="fas fa-save me-1"></i>Record Payments</button>
+            <a href="{% url 'dashboard:fee_payment_bulk_create' %}" class="btn btn-outline-secondary rounded-pill px-4">Change Student</a>
+        </div>
+    </div>
+</div>
+</form>
+{% endif %}
+<script>
+document.querySelectorAll('input[name="amount_paid"]').forEach(function(inp) {
+    inp.addEventListener('input', function() {
+        var total = 0;
+        document.querySelectorAll('input[name="amount_paid"]').forEach(function(el) {
+            var v = parseFloat(el.value) || 0;
+            total += v;
+        });
+        document.getElementById('total-paid').innerHTML = '&#8377;' + total.toFixed(2);
+    });
+});
+</script>
+{% endblock %}

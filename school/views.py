@@ -1,4 +1,5 @@
 import json
+import io
 from datetime import datetime, timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -639,9 +640,75 @@ def fee_payment_create(request):
 
 
 @login_required
+def fee_payment_bulk_create(request):
+    student = None
+    fee_structures = []
+
+    if request.method == 'POST' and request.POST.get('action') == 'create':
+        student_id = request.POST.get('student')
+        payment_date = request.POST.get('payment_date')
+        payment_method = request.POST.get('payment_method')
+        student = get_object_or_404(Student, pk=student_id)
+        receipt_prefix = f'RCPT{datetime.now().strftime("%Y%m%d%H%M%S")}'
+        idx = 0
+        fee_ids = request.POST.getlist('fee_id')
+        amounts = request.POST.getlist('amount_paid')
+        methods = request.POST.getlist('row_method')
+        txn_ids = request.POST.getlist('transaction_id')
+        for i, fs_id in enumerate(fee_ids):
+            amt = amounts[i] if i < len(amounts) else ''
+            if amt and float(amt) > 0:
+                idx += 1
+                receipt_no = f'{receipt_prefix}{idx:02d}'
+                txn = txn_ids[i].strip() if i < len(txn_ids) and txn_ids[i].strip() else receipt_no
+                FeePayment.objects.create(
+                    student=student,
+                    fee_structure_id=fs_id,
+                    amount_paid=float(amt),
+                    payment_date=payment_date,
+                    payment_method=methods[i] if i < len(methods) and methods[i] else payment_method,
+                    transaction_id=txn,
+                    receipt_number=receipt_no,
+                    is_paid=True,
+                    paid_by=request.user,
+                )
+        messages.success(request, f'{idx} payment(s) recorded for {student.full_name}!')
+        return redirect('dashboard:fee_payment_bulk_receipt', receipt_prefix=receipt_prefix)
+
+    student_id = request.POST.get('student')
+    if student_id:
+        student = get_object_or_404(Student, pk=student_id)
+        enrollment = student.enrollments.first()
+        if enrollment:
+            fee_structures = FeeStructure.objects.filter(
+                class_enrolled=enrollment.class_enrolled, is_active=True
+            )
+
+    form = FeePaymentForm()
+    return render(request, 'dashboard/fee_payments/bulk_form.html', {
+        'form': form,
+        'student': student,
+        'fee_structures': fee_structures,
+    })
+
+
+@login_required
 def fee_payment_receipt(request, pk):
     payment = get_object_or_404(FeePayment, pk=pk)
     return render(request, 'dashboard/fee_payments/receipt.html', {'payment': payment})
+
+
+@login_required
+def fee_payment_bulk_receipt(request, receipt_prefix):
+    payments = FeePayment.objects.filter(receipt_number__startswith=receipt_prefix).order_by('fee_structure')
+    if not payments.exists():
+        messages.error(request, 'Receipt not found.')
+        return redirect('dashboard:fee_payment_list')
+    total = sum(p.amount_paid for p in payments)
+    return render(request, 'dashboard/fee_payments/bulk_receipt.html', {
+        'payments': payments, 'total': total,
+        'receipt_prefix': receipt_prefix, 'student': payments.first().student,
+    })
 
 
 @login_required
@@ -649,6 +716,111 @@ def fee_payment_pdf(request, pk):
     payment = get_object_or_404(FeePayment, pk=pk)
     school_name = getattr(request, 'school_name', None) or getattr(settings, 'SCHOOL_NAME', 'School ERP')
     return generate_fee_receipt_pdf(payment, school_name)
+
+
+@login_required
+def fee_payment_bulk_receipt_pdf(request, receipt_prefix):
+    payments = FeePayment.objects.filter(receipt_number__startswith=receipt_prefix).order_by('fee_structure')
+    if not payments.exists():
+        messages.error(request, 'Receipt not found.')
+        return redirect('dashboard:fee_payment_list')
+
+    from reportlab.lib.pagesizes import A4
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, HRFlowable
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import mm
+    from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    import os
+
+    font_path = os.path.join(os.environ.get('WINDIR', r'C:\Windows'), 'Fonts', 'arial.ttf')
+    FONT_NAME = 'Helvetica'
+    FONT_BOLD = 'Helvetica-Bold'
+    if os.path.exists(font_path):
+        pdfmetrics.registerFont(TTFont('ArialUni', font_path))
+        pdfmetrics.registerFont(TTFont('ArialUni-Bold', os.path.join(os.environ.get('WINDIR', r'C:\Windows'), 'Fonts', 'arialbd.ttf')))
+        FONT_NAME = 'ArialUni'
+        FONT_BOLD = 'ArialUni-Bold'
+
+    student = payments.first().student
+    school_name = getattr(settings, 'SCHOOL_NAME', 'School ERP')
+    total = sum(p.amount_paid for p in payments)
+
+    styles = getSampleStyleSheet()
+    s_heading = ParagraphStyle('H', parent=styles['Heading2'], fontSize=14, spaceAfter=4, alignment=TA_CENTER, fontName=FONT_BOLD)
+    s_copy = ParagraphStyle('C', parent=styles['Normal'], fontSize=10, alignment=TA_CENTER, spaceBefore=2, textColor=colors.gray, fontName=FONT_NAME)
+    s_amt = ParagraphStyle('A', parent=styles['Normal'], fontSize=14, alignment=TA_RIGHT, spaceAfter=4, fontName=FONT_BOLD)
+    s_lbl = ParagraphStyle('L', parent=styles['Normal'], fontSize=10, fontName=FONT_BOLD)
+    s_val = ParagraphStyle('V', parent=styles['Normal'], fontSize=10, fontName=FONT_NAME)
+
+    def make_block(label, elements):
+        elements.append(Paragraph(school_name, s_heading))
+        elements.append(Paragraph('<b>Bulk Payment Receipt</b>', ParagraphStyle('S', parent=styles['Normal'], fontSize=11, alignment=TA_CENTER)))
+        elements.append(Paragraph(f'<i>{label}</i>', s_copy))
+        elements.append(HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea')))
+
+        info_fields = [
+            ('Student:', student.full_name),
+            ('Roll No:', student.roll_number),
+            ('Class:', str(student.enrollments.first().class_enrolled) if student.enrollments.exists() else '-'),
+            ('Date:', str(payments.first().payment_date)),
+        ]
+        for fname, fval in info_fields:
+            row = [[Paragraph(f'<b>{fname}</b>', s_lbl), Paragraph(f'{fval}', s_val)]]
+            t = Table(row, colWidths=[120, 330])
+            t.setStyle(TableStyle([('VALIGN', (0,0), (-1,-1), 'MIDDLE'), ('TOPPADDING', (0,0), (-1,-1), 2), ('BOTTOMPADDING', (0,0), (-1,-1), 2)]))
+            elements.append(t)
+
+        elements.append(HRFlowable(width='100%', thickness=0.5))
+        table_data = [['#', 'Fee Structure', 'Receipt', 'Method', 'Amount']]
+        for i, p in enumerate(payments, 1):
+            table_data.append([str(i), p.fee_structure.name, p.receipt_number, p.get_payment_method_display(), f'\u20b9{float(p.amount_paid):.2f}'])
+        table_data.append(['', '', '', 'Total:', f'\u20b9{float(total):.2f}'])
+
+        tbl = Table(table_data, colWidths=[30, 150, 90, 90, 90])
+        tbl.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#667eea')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (0, -1), 'CENTER'),
+            ('ALIGN', (-1, 0), (-1, -1), 'RIGHT'),
+            ('ALIGN', (-2, 0), (-2, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), FONT_BOLD),
+            ('FONTSIZE', (0, 0), (-1, 0), 9),
+            ('FONTSIZE', (0, 1), (-1, -1), 8),
+            ('BACKGROUND', (0, -1), (-1, -1), colors.HexColor('#e9ecef')),
+            ('GRID', (0, 0), (-1, -2), 0.5, colors.grey),
+            ('BOX', (0, 0), (-1, -1), 1, colors.black),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+            ('FONTNAME', (0, 1), (-1, -1), FONT_NAME),
+            ('FONTNAME', (0, -1), (-1, -1), FONT_BOLD),
+        ]))
+        elements.append(tbl)
+        elements.append(HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea')))
+        elements.append(Paragraph(f'<b>Total Amount Paid: \u20b9{float(total):.2f}</b>', s_amt))
+        elements.append(HRFlowable(width='100%', thickness=1, color=colors.HexColor('#667eea')))
+        elements.append(Paragraph('Thank you for the payment!', ParagraphStyle('T', parent=styles['Normal'], fontSize=9, alignment=TA_CENTER, textColor=colors.gray)))
+        elements.append(Paragraph('This is a computer-generated receipt.', ParagraphStyle('F', parent=styles['Normal'], fontSize=8, alignment=TA_CENTER, textColor=colors.gray)))
+        elements.append(Spacer(1, 20))
+        elements.append(Paragraph('_________________________', ParagraphStyle('Sig', parent=styles['Normal'], fontSize=10, alignment=TA_RIGHT, textColor=colors.black, fontName=FONT_NAME)))
+        elements.append(Paragraph('<b>Authorised Signatory</b>', ParagraphStyle('SigL', parent=styles['Normal'], fontSize=9, alignment=TA_RIGHT, textColor=colors.gray, fontName=FONT_NAME)))
+
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=A4, topMargin=12*mm, bottomMargin=12*mm, leftMargin=15*mm, rightMargin=15*mm)
+    elements = []
+    make_block('OFFICE COPY', elements)
+    elements.append(Spacer(1, 10))
+    elements.append(Paragraph('<i>~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~  CUT HERE  ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~</i>', ParagraphStyle('Cut', parent=styles['Normal'], fontSize=8, alignment=TA_CENTER, textColor=colors.gray)))
+    elements.append(Spacer(1, 10))
+    make_block('CUSTOMER COPY', elements)
+    doc.build(elements)
+    buf.seek(0)
+    response = HttpResponse(buf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename=bulk_receipt_{receipt_prefix}.pdf'
+    return response
+    return response
 
 
 @login_required

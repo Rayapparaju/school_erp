@@ -32,4 +32,4 @@ Thumbs.db
 *.env.local
 
 # Project specific
-school-erp/venv/
+venv/
