@@ -1,0 +1,147 @@
+:root {
+  --sidebar-width: 250px;
+  --sidebar-collapsed: 0px;
+}
+
+#wrapper {
+  overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  width: var(--sidebar-width);
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+}
+
+#sidebar-wrapper::-webkit-scrollbar {
+  width: 4px;
+}
+
+#sidebar-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 4px;
+}
+
+#page-content-wrapper {
+  margin-left: var(--sidebar-width);
+  transition: all 0.3s ease;
+  min-height: 100vh;
+}
+
+.sidebar-heading {
+  letter-spacing: 1px;
+}
+
+.sidebar-item {
+  border: none !important;
+  padding: 12px 20px !important;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  border-radius: 0 !important;
+}
+
+.sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  padding-left: 25px !important;
+}
+
+.sidebar-item.active {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-left: 3px solid #fff !important;
+}
+
+.sidebar-item i {
+  width: 24px;
+  text-align: center;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: calc(-1 * var(--sidebar-width));
+}
+
+#wrapper.toggled #page-content-wrapper {
+  margin-left: 0;
+}
+
+@media (max-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: calc(-1 * var(--sidebar-width));
+  }
+
+  #page-content-wrapper {
+    margin-left: 0;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  #wrapper.toggled #page-content-wrapper {
+    margin-left: 0;
+  }
+}
+
+.stat-card .rounded-circle {
+  transition: all 0.3s;
+}
+
+.stat-card:hover .rounded-circle {
+  transform: scale(1.1);
+}
+
+/* Table enhancements */
+.table th {
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+/* Card enhancements */
+.card {
+  transition: all 0.3s ease;
+}
+
+/* Form layout */
+.form-label {
+  margin-bottom: 0.4rem;
+}
+
+/* Sidebar toggle button on hover */
+#menu-toggle {
+  transition: all 0.2s;
+}
+
+#menu-toggle:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Badge fix for dark mode */
+[data-bs-theme="dark"] .badge.bg-success-subtle {
+  background: rgba(33, 94, 97, 0.15) !important;
+}
+[data-bs-theme="dark"] .badge.bg-danger-subtle {
+  background: rgba(192, 57, 43, 0.15) !important;
+}
+[data-bs-theme="dark"] .badge.bg-warning-subtle {
+  background: rgba(255, 158, 32, 0.15) !important;
+}
+[data-bs-theme="dark"] .badge.bg-info-subtle {
+  background: rgba(47, 138, 142, 0.15) !important;
+}
+[data-bs-theme="dark"] .badge.bg-primary-subtle {
+  background: rgba(255, 158, 32, 0.15) !important;
+}
