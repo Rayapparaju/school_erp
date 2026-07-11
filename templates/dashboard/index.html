@@ -11,42 +11,42 @@
 {% comment %} Statistics Cards {% endcomment %}
 <div class="row g-3 mb-4">
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #667eea !important;">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #ff9e20 !important;">
             <div class="card-body"><div class="d-flex align-items-center"><div class="rounded-circle bg-primary-soft p-3 me-3"><i class="fas fa-user-graduate text-primary fa-lg"></i></div><div><h3 class="fw-bold mb-0">{{ total_students }}</h3><small class="text-muted">Students</small></div></div></div>
         </div>
     </div>
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #38ef7d !important;">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #215e61 !important;">
             <div class="card-body"><div class="d-flex align-items-center"><div class="rounded-circle bg-success-soft p-3 me-3"><i class="fas fa-chalkboard-teacher text-success fa-lg"></i></div><div><h3 class="fw-bold mb-0">{{ total_teachers }}</h3><small class="text-muted">Teachers</small></div></div></div>
         </div>
     </div>
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #f39c12 !important;">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #ff9e20 !important;">
             <div class="card-body"><div class="d-flex align-items-center"><div class="rounded-circle bg-warning-soft p-3 me-3"><i class="fas fa-school text-warning fa-lg"></i></div><div><h3 class="fw-bold mb-0">{{ total_classes }}</h3><small class="text-muted">Classes</small></div></div></div>
         </div>
     </div>
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #9b59b6 !important;">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #215e61 !important;">
             <div class="card-body"><div class="d-flex align-items-center"><div class="rounded-circle bg-info-soft p-3 me-3"><i class="fas fa-book text-info fa-lg"></i></div><div><h3 class="fw-bold mb-0">{{ total_subjects }}</h3><small class="text-muted">Subjects</small></div></div></div>
         </div>
     </div>
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #e74c3c !important;">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #c0392b !important;">
             <div class="card-body"><div class="d-flex align-items-center"><div class="rounded-circle bg-danger-soft p-3 me-3"><i class="fas fa-dollar-sign text-danger fa-lg"></i></div><div><h3 class="fw-bold mb-0">${{ total_fees|floatformat:0 }}</h3><small class="text-muted">Fees Collected</small></div></div></div>
         </div>
     </div>
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #1abc9c !important;">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #215e61 !important;">
             <div class="card-body"><div class="d-flex align-items-center"><div class="rounded-circle bg-success-soft p-3 me-3"><i class="fas fa-check-circle text-success fa-lg"></i></div><div><h3 class="fw-bold mb-0">{{ today_present }}</h3><small class="text-muted">Present Today</small></div></div></div>
         </div>
     </div>
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #e67e22 !important;">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #ff9e20 !important;">
             <div class="card-body"><div class="d-flex align-items-center"><div class="rounded-circle bg-warning-soft p-3 me-3"><i class="fas fa-bus text-warning fa-lg"></i></div><div><h3 class="fw-bold mb-0">{{ total_vehicles }}</h3><small class="text-muted">Vehicles</small></div></div></div>
         </div>
     </div>
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #3498db !important;">
+        <div class="card border-0 shadow-sm rounded-4 stat-card h-100" style="border-left: 4px solid #215e61 !important;">
             <div class="card-body"><div class="d-flex align-items-center"><div class="rounded-circle bg-info-soft p-3 me-3"><i class="fas fa-road text-info fa-lg"></i></div><div><h3 class="fw-bold mb-0">{{ total_routes }}</h3><small class="text-muted">Routes</small></div></div></div>
         </div>
     </div>
@@ -111,7 +111,7 @@
 <script>
 const ctx1 = document.getElementById('monthlyChart').getContext('2d');
 const ctx2 = document.getElementById('attendanceChart').getContext('2d');
-fetch('/dashboard/chart-data/').then(r=>r.json()).then(d=>{new Chart(ctx1,{type:'line',data:{labels:d.labels,datasets:[{label:'Students',data:d.students,borderColor:'#667eea',backgroundColor:'rgba(102,126,234,0.1)',fill:true,tension:0.4},{label:'Teachers',data:d.teachers,borderColor:'#38ef7d',backgroundColor:'rgba(56,239,125,0.1)',fill:true,tension:0.4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}})});
-fetch('/dashboard/attendance-chart-data/').then(r=>r.json()).then(d=>{new Chart(ctx2,{type:'doughnut',data:{labels:['Present','Absent'],datasets:[{data:[d.present.reduce((a,b)=>a+b,0),d.absent.reduce((a,b)=>a+b,0)],backgroundColor:['#38ef7d','#ff6b6b'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}})});
+fetch('/dashboard/chart-data/').then(r=>r.json()).then(d=>{new Chart(ctx1,{type:'line',data:{labels:d.labels,datasets:[{label:'Students',data:d.students,borderColor:'#ff9e20',backgroundColor:'rgba(255,158,32,0.1)',fill:true,tension:0.4},{label:'Teachers',data:d.teachers,borderColor:'#215e61',backgroundColor:'rgba(33,94,97,0.1)',fill:true,tension:0.4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}})});
+fetch('/dashboard/attendance-chart-data/').then(r=>r.json()).then(d=>{new Chart(ctx2,{type:'doughnut',data:{labels:['Present','Absent'],datasets:[{data:[d.present.reduce((a,b)=>a+b,0),d.absent.reduce((a,b)=>a+b,0)],backgroundColor:['#215e61','#c0392b'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}})});
 </script>
 {% endblock %}

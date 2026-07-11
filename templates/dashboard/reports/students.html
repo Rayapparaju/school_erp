@@ -14,5 +14,5 @@
 {% endblock %}
 {% block extra_js %}
 <script>const genCtx=document.getElementById('genderChart').getContext('2d');
-fetch('/dashboard/chart-data/').then(r=>r.json()).then(d=>{new Chart(genCtx,{type:'pie',data:{labels:['Male','Female','Other'],datasets:[{data:[{% for g in by_gender %}{{ g.count }}{% if not forloop.last %},{% endif %}{% endfor %}],backgroundColor:['#667eea','#38ef7d','#f39c12']}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}})});</script>
+fetch('/dashboard/chart-data/').then(r=>r.json()).then(d=>{new Chart(genCtx,{type:'pie',data:{labels:['Male','Female','Other'],datasets:[{data:[{% for g in by_gender %}{{ g.count }}{% if not forloop.last %},{% endif %}{% endfor %}],backgroundColor:['#ff9e20','#215e61','#2f8a8e']}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}})});</script>
 {% endblock %}

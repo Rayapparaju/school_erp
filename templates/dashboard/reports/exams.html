@@ -9,5 +9,5 @@
 <div class="card border-0 shadow-sm rounded-4"><div class="card-body p-3"><canvas id="examChart" height="200"></canvas></div></div>
 {% endblock %}
 {% block extra_js %}
-<script>fetch('/dashboard/chart-data/').then(r=>r.json()).then(d=>{new Chart(document.getElementById('examChart'),{type:'line',data:{labels:['Term 1','Term 2','Term 3','Term 4'],datasets:[{label:'Avg Performance',data:[{{ avg_marks|floatformat:0 }},{{ avg_marks|floatformat:0 }},{{ avg_marks|floatformat:0 }},{{ avg_marks|floatformat:0 }}],borderColor:'#667eea',fill:true,backgroundColor:'rgba(102,126,234,0.1)'}]},options:{responsive:true,plugins:{legend:{display:false}}}})});</script>
+<script>fetch('/dashboard/chart-data/').then(r=>r.json()).then(d=>{new Chart(document.getElementById('examChart'),{type:'line',data:{labels:['Term 1','Term 2','Term 3','Term 4'],datasets:[{label:'Avg Performance',data:[{{ avg_marks|floatformat:0 }},{{ avg_marks|floatformat:0 }},{{ avg_marks|floatformat:0 }},{{ avg_marks|floatformat:0 }}],borderColor:'#ff9e20',fill:true,backgroundColor:'rgba(255,158,32,0.1)'}]},options:{responsive:true,plugins:{legend:{display:false}}}})});</script>
 {% endblock %}

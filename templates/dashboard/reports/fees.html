@@ -9,5 +9,5 @@
 </div>
 {% endblock %}
 {% block extra_js %}
-<script>new Chart(document.getElementById('feesChart'),{type:'doughnut',data:{labels:[{% for m in by_method %}'{{ m.get_payment_method_display|default:m.payment_method }}'{% if not forloop.last %},{% endif %}{% endfor %}],datasets:[{data:[{% for m in by_method %}{{ m.total }}{% if not forloop.last %},{% endif %}{% endfor %}],backgroundColor:['#667eea','#38ef7d','#f39c12','#e74c3c','#9b59b6']}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}});</script>
+<script>new Chart(document.getElementById('feesChart'),{type:'doughnut',data:{labels:[{% for m in by_method %}'{{ m.get_payment_method_display|default:m.payment_method }}'{% if not forloop.last %},{% endif %}{% endfor %}],datasets:[{data:[{% for m in by_method %}{{ m.total }}{% if not forloop.last %},{% endif %}{% endfor %}],backgroundColor:['#ff9e20','#215e61','#d48800','#c0392b','#2f8a8e']}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}});</script>
 {% endblock %}

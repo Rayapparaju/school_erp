@@ -11,5 +11,5 @@
 <div class="card border-0 shadow-sm rounded-4"><div class="card-body p-3"><canvas id="attendanceReportChart" height="200"></canvas></div></div>
 {% endblock %}
 {% block extra_js %}
-<script>new Chart(document.getElementById('attendanceReportChart'),{type:'bar',data:{labels:['Present','Absent','Late'],datasets:[{label:'Attendance',data:[{{ present }},{{ absent }},{{ late }}],backgroundColor:['#38ef7d','#ff6b6b','#f39c12'],borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});</script>
+<script>new Chart(document.getElementById('attendanceReportChart'),{type:'bar',data:{labels:['Present','Absent','Late'],datasets:[{label:'Attendance',data:[{{ present }},{{ absent }},{{ late }}],backgroundColor:['#215e61','#c0392b','#ff9e20'],borderRadius:6}]},options:{responsive:true,plugins:{legend:{display:false}}}});</script>
 {% endblock %}
